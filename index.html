@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNAB - Banco de Apuntes Medicina</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo-container">
+            <img src="assets/logo.png" alt="UNAB Logo" class="logo">
+            <div class="header-text">
+                <h1>Medicina UNAB</h1>
+                <p>Banco de Apuntes Público</p>
+            </div>
+        </div>
+        <button id="upload-btn" class="upload-btn">
+            <i class="fas fa-upload"></i> Subir Apunte
+        </button>
+    </header>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2>Subir Nuevo Apunte</h2>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="semester-select">Semestre</label>
+                        <select id="semester-select" required>
+                            <option value="">Selecciona un semestre</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-select">Asignatura</label>
+                        <select id="subject-select" required disabled>
+                            <option value="">Primero selecciona un semestre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-title">Título del Apunte</label>
+                        <input type="text" id="note-title" placeholder="Ej: Resumen Anatomía..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-author">Autor (Tu nombre)</label>
+                        <input type="text" id="note-author" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-year">Año</label>
+                        <input type="number" id="note-year" value="2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-url">Link del Archivo/Carpeta (Drive/OneDrive)</label>
+                        <input type="url" id="note-url" placeholder="https://..." required>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submit-btn">Subir Apunte</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Semestres</h2>
+            <nav id="semester-nav">
+                <!-- Dynamically populated -->
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="filters">
+                <h2 id="current-semester-title">Selecciona un Semestre</h2>
+                <div class="subject-filter-container">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <!-- Dynamically populated subjects -->
+                </div>
+            </div>
+
+            <div id="notes-grid" class="notes-grid">
+                <!-- Notes cards will appear here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase Compat / Global Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Config and App Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

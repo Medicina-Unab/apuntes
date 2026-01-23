@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Migrating Data...</title>
+    <!-- Firebase Compat / Global Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+    <h1>Migrating Data to Firestore...</h1>
+    <div id="status">Starting...</div>
+
+    <!-- Load Local Data -->
+    <script src="data.js"></script>
+
+    <!-- Load Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <script>
+        async function migrate() {
+            const statusDiv = document.getElementById('status');
+            try {
+                if (typeof notesData === 'undefined') {
+                    throw new Error("data.js not loaded properly.");
+                }
+                const semesters = notesData.semesters;
+                statusDiv.innerText = `Found ${semesters.length} semesters to migrate.`;
+
+                const batch = db.batch();
+
+                for (const semester of semesters) {
+                    const docRef = db.collection("semesters").doc(semester.id.toString());
+                    batch.set(docRef, semester);
+                    statusDiv.innerHTML += `<br>Queued: ${semester.name}`;
+                }
+
+                await batch.commit();
+
+                statusDiv.innerHTML += "<br><br><strong>Migration Complete!</strong>";
+                console.log("Migration Complete");
+            } catch (error) {
+                console.error("Migration failed:", error);
+                statusDiv.innerHTML += `<br><strong style="color:red">Error: ${error.message}</strong>`;
+            }
+        }
+
+        // Wait for Firebase to initialize
+        setTimeout(migrate, 1000);
+    </script>
+</body>
+
+</html>
