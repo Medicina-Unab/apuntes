@@ -16,6 +16,34 @@ const semesterSelect = document.getElementById('semester-select');
 const subjectSelect = document.getElementById('subject-select');
 const submitBtn = document.getElementById('submit-btn');
 
+// Theme Toggle Logic
+const themeToggleBtn = document.getElementById('theme-toggle');
+const themeIcon = themeToggleBtn.querySelector('i');
+
+// Check LocalStorage or System Preference
+const savedTheme = localStorage.getItem('theme');
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeIcon.classList.replace('fa-moon', 'fa-sun');
+}
+
+themeToggleBtn.onclick = () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+
+    // Update Icon
+    if (newTheme === 'dark') {
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+    }
+};
+
 let currentSemesterId = 1;
 let currentFilter = 'all';
 let data = { semesters: [] };
@@ -91,13 +119,23 @@ function loadSemester(id) {
 }
 
 // Render Filters
+// Render Filters
 function renderFilters(subjects) {
-    // Keep 'Todas' button
-    subjectFilterContainer.innerHTML = '<button class="filter-btn active" data-filter="all">Todas</button>';
+    subjectFilterContainer.innerHTML = ''; // Clear container
+
+    // Create 'Todas' button
+    const allBtn = document.createElement('button');
+    allBtn.classList.add('filter-btn');
+    if (currentFilter === 'all') allBtn.classList.add('active'); // Maintain active state if re-rendering
+    allBtn.textContent = 'Todas';
+    allBtn.dataset.filter = 'all';
+    allBtn.onclick = (e) => handleFilterClick(e, 'all');
+    subjectFilterContainer.appendChild(allBtn);
 
     subjects.forEach(subject => {
         const btn = document.createElement('button');
         btn.classList.add('filter-btn');
+        if (currentFilter === subject) btn.classList.add('active');
         btn.textContent = subject;
         btn.dataset.filter = subject;
         btn.onclick = (e) => handleFilterClick(e, subject);
@@ -145,8 +183,8 @@ function renderNotes(notes) {
                 <h3>${note.title}</h3>
                 <p class="author">Por: ${note.author}</p>
                 <div class="card-footer">
-                    <span>${note.year}</span>
-                    <span class="download-icon">Ver Apunte →</span>
+                    <span class="year-badge">${note.year}</span>
+                    <span class="view-note-btn">Ver Apunte <i class="fas fa-external-link-alt"></i></span>
                 </div>
             </div>
         `;
