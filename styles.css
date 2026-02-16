@@ -152,24 +152,28 @@ body {
 .theme-toggle {
     background: transparent;
     border: 1px solid var(--border-color);
-    width: 40px;
     height: 40px;
-    border-radius: 50%;
+    padding: 0 1rem;
+    border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
     cursor: pointer;
     color: var(--text-secondary);
     transition: var(--transition);
     margin-left: auto;
-    /* Push to right if needed, but handled by flex gap */
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .theme-toggle:hover {
-    background-color: var(--bg-surface);
     color: var(--unab-blue);
     border-color: var(--unab-blue);
-    transform: rotate(15deg);
+}
+
+.bg-custom-blue {
+    background-color: var(--bg-surface);
 }
 
 /* Layout */

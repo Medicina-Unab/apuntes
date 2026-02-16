@@ -19,15 +19,25 @@ const submitBtn = document.getElementById('submit-btn');
 // Theme Toggle Logic
 const themeToggleBtn = document.getElementById('theme-toggle');
 const themeIcon = themeToggleBtn.querySelector('i');
+const themeText = themeToggleBtn.querySelector('span');
+
+function updateThemeUI(theme) {
+    if (theme === 'dark') {
+        themeText.textContent = "🌙";
+    } else {
+        themeText.textContent = "☀️";
+    }
+}
 
 // Check LocalStorage or System Preference
 const savedTheme = localStorage.getItem('theme');
 const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
 
-if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+if (initialTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
-    themeIcon.classList.replace('fa-moon', 'fa-sun');
 }
+updateThemeUI(initialTheme);
 
 themeToggleBtn.onclick = () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -35,13 +45,7 @@ themeToggleBtn.onclick = () => {
 
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-
-    // Update Icon
-    if (newTheme === 'dark') {
-        themeIcon.classList.replace('fa-moon', 'fa-sun');
-    } else {
-        themeIcon.classList.replace('fa-sun', 'fa-moon');
-    }
+    updateThemeUI(newTheme);
 };
 
 let currentSemesterId = 1;
